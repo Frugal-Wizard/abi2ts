@@ -1,0 +1,5 @@
+node_modules/
+dist/
+test/artifacts/
+test/contracts-ts/
+test-report/
