@@ -1,4 +1,4 @@
-import { getAccounts, ZERO_ADDRESS } from 'abi2ts-lib';
+import { getAccounts, ZERO_ADDRESS } from '@theorderbookdex/abi2ts-lib';
 import { expect, use } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { SenderTest, SenderAddress } from './contracts-ts/SenderTest';

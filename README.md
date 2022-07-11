@@ -32,7 +32,7 @@ Use at your own discretion and don't rely on its interface staying backward comp
 ```typescript
 // builing the code
 
-import { abi2ts } from './src/abi2ts';
+import { abi2ts } from '@theorderbookdex/abi2ts';
 import { readFileSync, writeFileSync } from 'fs';
 
 writeFileSync('Contract.ts', abi2ts(readFileSync('Contract.json')));

@@ -3,7 +3,7 @@ import del from 'del';
 import through2 from 'through2';
 import { spawn } from 'child_process';
 import * as File from 'vinyl';
-import solc from 'solidity-compiler';
+import solc from '@theorderbookdex/solidity-compiler';
 import log from 'fancy-log';
 import { abi2ts } from './src/abi2ts';
 

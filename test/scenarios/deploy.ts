@@ -1,4 +1,4 @@
-import { DefaultError, UnsignedTransaction } from 'abi2ts-lib';
+import { DefaultError, UnsignedTransaction } from '@theorderbookdex/abi2ts-lib';
 import { ConstructorNoArgs, ConstructorOneArgString, ConstructorOneArgUint256, ConstructorThrowsError } from '../contracts-ts/ConstructorTest';
 
 interface Scenario {

@@ -1,4 +1,4 @@
-import { UnsignedTransaction } from 'abi2ts-lib';
+import { UnsignedTransaction } from '@theorderbookdex/abi2ts-lib';
 import { MethodTest } from '../contracts-ts/MethodTest';
 
 // eslint-disable-next-line @typescript-eslint/ban-types

@@ -1,9 +1,11 @@
 {
-  "name": "abi2ts",
+  "name": "@theorderbookdex/abi2ts",
   "version": "0.1.0",
+  "description": "This is a code generator that takes the JSON produced by the solidity compiler and creates typescript code for interacting with the corresponding smart contracts",
   "license": "MIT",
-  "private": true,
+  "author": "Frugal-Wizard",
   "main": "dist/abi2ts.js",
+  "repository": "https://github.com/TheOrderbookDEX/abi2ts.git",
   "scripts": {
     "prepare": "gulp",
     "test": "gulp test"
@@ -12,6 +14,8 @@
     "ethers": "~5.6.9"
   },
   "devDependencies": {
+    "@theorderbookdex/abi2ts-lib": "~0.1.0",
+    "@theorderbookdex/solidity-compiler": "0.8.15",
     "@types/chai": "~4.3.1",
     "@types/chai-as-promised": "~7.1.5",
     "@types/fancy-log": "~1.3.1",
@@ -22,7 +26,6 @@
     "@types/through2": "~2.0.36",
     "@typescript-eslint/eslint-plugin": "~5.29.0",
     "@typescript-eslint/parser": "~5.29.0",
-    "abi2ts-lib": "file:deps/abi2ts-lib-0.1.0.tgz",
     "chai": "~4.3.6",
     "chai-as-promised": "~7.1.1",
     "del": "~6.1.1",
@@ -32,7 +35,6 @@
     "gulp": "~4.0.2",
     "mocha": "~10.0.0",
     "mochawesome": "~7.1.3",
-    "solidity-compiler": "file:deps/solidity-compiler-0.8.15.tgz",
     "through2": "~4.0.2",
     "ts-node": "~10.8.1",
     "typescript": "~4.7.4"

@@ -38,7 +38,7 @@ export function abi2ts(jsonContents: Buffer): Buffer {
     }
     return Buffer.from(`
 import * as ethers from 'ethers';
-import * as abi2tsLib from 'abi2ts-lib';
+import * as abi2tsLib from '@theorderbookdex/abi2ts-lib';
 
 ${ Object.entries(structs).map(([ structName, fields ]) => `
 export class ${structName} {${ fields.map(({ name, type }) => `
