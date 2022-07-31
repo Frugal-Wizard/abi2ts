@@ -12,6 +12,7 @@ interface Scenario {
     readonly readonly: boolean;
     readonly expectedReturnType?: ReturnType;
     call(): Promise<unknown>;
+    sendTransaction(): Promise<string>;
     callStatic(): Promise<unknown>;
     populateTransaction(): Promise<UnsignedTransaction>;
     estimateGas(): Promise<unknown>;
@@ -31,6 +32,11 @@ function fillInScenario<M extends MethodName>(method: M, ...args: Parameters<Met
             const contract = await MethodTest.deploy();
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             return await (contract[method] as any)(...args);
+        },
+        async sendTransaction() {
+            const contract = await MethodTest.deploy();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            return await (contract.sendTransaction as any)[method](...args);
         },
         async callStatic() {
             const contract = await MethodTest.deploy();

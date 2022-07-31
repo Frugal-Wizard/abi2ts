@@ -61,6 +61,18 @@ describe('method', function() {
                 }
             });
 
+            if (!scenario.readonly) {
+                describe('sendTransaction', function() {
+                    it('should work', async function() {
+                        await scenario.sendTransaction();
+                    });
+    
+                    it('should return a transaction hash', async function() {
+                        await Transaction.get(await scenario.sendTransaction());
+                    });
+                });
+            }
+
             describe('callStatic', function() {
                 it('should work', async function() {
                     await scenario.callStatic();

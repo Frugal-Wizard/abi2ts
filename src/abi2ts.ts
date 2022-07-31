@@ -63,6 +63,12 @@ ${ bytecode ? `
         return await this._deploy(${linkArgsObject(linkArgs)}, ${argsArray(ctorArgs)}, overrides);
     }
 
+    static readonly sendTransaction = {
+        deploy: async (${declareArgs(deployArgs, true)}): Promise<string> => {
+            return await this._deploySendTransaction(${linkArgsObject(linkArgs)}, ${argsArray(ctorArgs)}, overrides);
+        }
+    };
+
     static readonly callStatic = {
         deploy: async (${declareArgs(deployArgs, true)}): Promise<string> => {
             return await this._deployStatic(${linkArgsObject(linkArgs)}, ${argsArray(ctorArgs)}, overrides);
@@ -85,6 +91,14 @@ ${ functions.map(({ read, name, args, returnType }) => read ? `
         return await this._call('${name}', ${argsArray(args)}, overrides);
     }
 `).join('') }
+
+    readonly sendTransaction = {
+${ functions.filter(({ write }) => write).map(({ name, args }) => `
+        ${name}: async (${declareArgs(args, true)}): Promise<string> => {
+            return await this._sendTransaction('${name}', ${argsArray(args)}, overrides);
+        },
+`).join('') }
+    };
 
     readonly callStatic = {
 ${ functions.map(({ name, args, returnType }) => `

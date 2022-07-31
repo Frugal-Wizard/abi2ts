@@ -8,6 +8,7 @@ interface Scenario {
     readonly contract: string;
     readonly args: unknown[];
     deploy(): Promise<unknown>;
+    sendTransaction(): Promise<string>;
     deployStatic(): Promise<string>;
     populateTransaction(): Promise<UnsignedTransaction>;
 }
@@ -15,6 +16,9 @@ interface Scenario {
 interface Contract<Args extends unknown[]> {
     name: string;
     deploy(...args: Args): Promise<unknown>;
+    sendTransaction: {
+        deploy(...args: Args): Promise<string>;
+    };
     callStatic: {
         deploy(...args: Args): Promise<string>;
     };
@@ -29,6 +33,9 @@ function fillInScenario<C extends Contract<A>, A extends unknown[]>(contract: C,
         args,
         async deploy() {
             return await contract.deploy(...args);
+        },
+        async sendTransaction() {
+            return await contract.sendTransaction.deploy(...args);
         },
         async deployStatic() {
             return await contract.callStatic.deploy(...args);
