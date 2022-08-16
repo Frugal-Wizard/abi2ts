@@ -50,5 +50,5 @@ export function runMocha() {
 }
 
 export function test(done: () => void) {
-    series(cleanTest, compileTestContracts, createTestContractsTS, runMocha)(done);
+    void series(cleanTest, compileTestContracts, createTestContractsTS, runMocha)(done);
 }
