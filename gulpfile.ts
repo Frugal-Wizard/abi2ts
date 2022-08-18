@@ -1,14 +1,17 @@
 import { src, dest, series } from 'gulp';
-import del from 'del';
 import through2 from 'through2';
 import { spawn } from 'child_process';
 import * as File from 'vinyl';
 import solc from '@theorderbookdex/solidity-compiler';
 import log from 'fancy-log';
 import { abi2ts } from './src/abi2ts';
+import rimraf from 'rimraf';
+import { promisify } from 'util';
+
+const promisifiedRimraf = promisify(rimraf);
 
 export async function clean() {
-    await del([ 'dist/**' ]);
+    await promisifiedRimraf('dist/**');
 }
 
 export function compileTypescript() {
@@ -16,11 +19,12 @@ export function compileTypescript() {
 }
 
 export default function build(done: () => void) {
-    series(clean, compileTypescript)(done);
+    void series(clean, compileTypescript)(done);
 }
 
 export async function cleanTest() {
-    await del([ 'test/artifacts/**', 'test/contracts-ts/**' ]);
+    await promisifiedRimraf('test/artifacts/**');
+    await promisifiedRimraf('test/contracts-ts/**');
 }
 
 export function compileTestContracts() {
