@@ -8,7 +8,9 @@
   "repository": "https://github.com/TheOrderbookDEX/abi2ts.git",
   "scripts": {
     "prepare": "gulp",
-    "test": "gulp test"
+    "test": "gulp test",
+    "lint": "eslint . --ext .ts",
+    "typecheck": "tsc"
   },
   "dependencies": {
     "ethers": "^5.6.9"
