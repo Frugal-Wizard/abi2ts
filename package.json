@@ -1,6 +1,6 @@
 {
   "name": "@theorderbookdex/abi2ts",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "This is a code generator that takes the JSON produced by the solidity compiler and creates typescript code for interacting with the corresponding smart contracts",
   "license": "MIT",
   "author": "Frugal-Wizard",
