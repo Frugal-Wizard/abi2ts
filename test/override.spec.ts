@@ -1,4 +1,4 @@
-import { getAccounts, ZERO_ADDRESS } from '@theorderbookdex/abi2ts-lib';
+import { getAccounts, ZERO_ADDRESS } from '@frugal-wizard/abi2ts-lib';
 import { use } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { ConstructorNoArgs } from './contracts-ts/ConstructorTest';

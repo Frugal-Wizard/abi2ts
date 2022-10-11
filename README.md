@@ -4,7 +4,7 @@
 
 This is a code generator that takes the JSON produced by the solidity compiler and creates typescript code for interacting with the corresponding smart contracts.
 
-The generated code requires the library [abi2ts-lib](https://github.com/TheOrderbookDEX/abi2ts-lib) as a dependency to work.
+The generated code requires the library [abi2ts-lib](https://github.com/Frugal-Wizard/abi2ts-lib) as a dependency to work.
 
 Currently it depends on [ethers](https://github.com/ethers-io/ethers.js/) but eventually this dependency will be dropped (or at least that is the intention).
 
@@ -32,7 +32,7 @@ Use at your own discretion and don't rely on its interface staying backward comp
 ```typescript
 // builing the code
 
-import { abi2ts } from '@theorderbookdex/abi2ts';
+import { abi2ts } from '@frugal-wizard/abi2ts';
 import { readFileSync, writeFileSync } from 'fs';
 
 writeFileSync('Contract.ts', abi2ts(readFileSync('Contract.json')));

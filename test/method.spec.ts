@@ -1,4 +1,4 @@
-import { createSigner, parseValue, Transaction } from '@theorderbookdex/abi2ts-lib';
+import { createSigner, parseValue, Transaction } from '@frugal-wizard/abi2ts-lib';
 import { use, expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import addContext from 'mochawesome/addContext';
@@ -66,7 +66,7 @@ describe('method', function() {
                     it('should work', async function() {
                         await scenario.sendTransaction();
                     });
-    
+
                     it('should return a transaction hash', async function() {
                         await Transaction.get(await scenario.sendTransaction());
                     });

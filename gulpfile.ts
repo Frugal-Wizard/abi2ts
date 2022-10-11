@@ -2,7 +2,7 @@ import { src, dest, series } from 'gulp';
 import through2 from 'through2';
 import { spawn } from 'child_process';
 import * as File from 'vinyl';
-import solc from '@theorderbookdex/solidity-compiler';
+import solc from '@frugal-wizard/solidity-compiler-wrapper';
 import log from 'fancy-log';
 import { abi2ts } from './src/abi2ts';
 import rimraf from 'rimraf';
