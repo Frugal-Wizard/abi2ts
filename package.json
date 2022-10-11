@@ -16,7 +16,7 @@
     "ethers": "^5.7.1"
   },
   "devDependencies": {
-    "@frugal-wizard/abi2ts-lib": "^0.3.2",
+    "@frugal-wizard/abi2ts-lib": "^0.4.0",
     "@frugal-wizard/solidity-compiler-wrapper": "^1.1.0",
     "@types/chai": "^4.3.3",
     "@types/chai-as-promised": "^7.1.5",
