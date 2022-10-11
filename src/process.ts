@@ -220,7 +220,7 @@ function transformType({ type, internalType = '', components = [] }: ABITypeDefi
                     api2int:   IDENTITY,
                     int2api:   IDENTITY,
                     usr2int:   IDENTITY,
-                    int2topic: value => `ethers.utils.hexZeroPad(ethers.utils.hexValue(${value}), 32)`,
+                    int2topic: value => `abi2tsLib.hexstringPad(abi2tsLib.hexstring(${value}), 64)`,
                 };
             default:
                 return {
@@ -230,7 +230,7 @@ function transformType({ type, internalType = '', components = [] }: ABITypeDefi
                     api2int:   value => `BigInt(String(${value}))`,
                     int2api:   IDENTITY,
                     usr2int:   IDENTITY,
-                    int2topic: value => `ethers.utils.hexZeroPad(ethers.utils.hexValue(${value}), 32)`,
+                    int2topic: value => `abi2tsLib.hexstringPad(abi2tsLib.hexstring(${value}), 64)`,
                 };
         }
     }
@@ -243,7 +243,7 @@ function transformType({ type, internalType = '', components = [] }: ABITypeDefi
                 api2int:   IDENTITY,
                 int2api:   IDENTITY,
                 usr2int:   value => `(typeof ${value} == 'object' ? ${value}.address : ${value})`,
-                int2topic: value => `ethers.utils.hexZeroPad(${value}, 32)`,
+                int2topic: value => `abi2tsLib.hexstringPad(${value}, 64)`,
             };
         case 'bool':
             return {
