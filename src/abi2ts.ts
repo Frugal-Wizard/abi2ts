@@ -37,7 +37,6 @@ export function abi2ts(jsonContents: Buffer): Buffer {
         contracts.push({ className, abi, bytecode, deployArgs, linkArgs, ctorArgs, errors, events, functions });
     }
     return Buffer.from(`
-import * as ethers from 'ethers';
 import * as abi2tsLib from '@frugal-wizard/abi2ts-lib';
 
 ${ Object.entries(structs).map(([ structName, fields ]) => `
@@ -55,8 +54,6 @@ export class ${className} extends abi2tsLib.Contract {
     static readonly ABI = ${JSON.stringify(abi)};
 
     static readonly BYTECODE = '${bytecode}';
-
-    private static readonly _interface = new ethers.utils.Interface(this.ABI);
 
 ${ bytecode ? `
     static async deploy(${declareArgs(deployArgs, true)}): Promise<${className}> {
@@ -164,11 +161,6 @@ export class ${name} extends abi2tsLib.ContractEvent {
 
     get sig() {
         return ${name}.SIG;
-    }
-
-    private get decodedLog() {
-        const fragment = ethers.utils.Fragment.from(this.sig) as ethers.utils.EventFragment;
-        return new ethers.utils.Interface([ fragment ]).decodeEventLog(fragment, this.log.data, this.log.topics);
     }
 ${ args.map(({ name, type }, index) => `
     get ${name}(): ${type.internal} {
