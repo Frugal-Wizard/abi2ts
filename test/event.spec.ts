@@ -8,7 +8,7 @@ use(chaiAsPromised);
 
 // TODO tests are too simple since we are only wrapping ethers, but should be more thorough for when we stop using it
 
-describe.only('event', () => {
+describe('event', () => {
     before(() => {
         setUpEthereum();
     });
