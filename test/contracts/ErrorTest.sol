@@ -7,6 +7,10 @@ contract ErrorTest {
     error OneArgUint256Error(uint256 uint256Arg);
     error OneArgStringError(string stringArg);
 
+    function throwDefaultError() external pure {
+        revert("error");
+    }
+
     function throwsNoArgsError() external pure {
         revert NoArgsError();
     }

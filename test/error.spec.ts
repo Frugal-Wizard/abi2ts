@@ -1,4 +1,4 @@
-import { decodeErrorData } from '@frugal-wizard/abi2ts-lib';
+import { decodeErrorData, DefaultError } from '@frugal-wizard/abi2ts-lib';
 import { use, expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { ErrorTest, NoArgsError, OneArgStringError, OneArgUint256Error } from './contracts-ts/ErrorTest';
@@ -14,6 +14,14 @@ describe('error', () => {
     });
 
     describe('functions that throw', () => {
+        describe('function that throws standard error', () => {
+            it('should throw expected error', async () => {
+                await expect((await ErrorTest.deploy()).throwDefaultError())
+                    .to.be.rejectedWith(DefaultError)
+                    .that.eventually.have.property('reason', 'error');
+            });
+        });
+
         describe('function that throws no args error', () => {
             it('should throw expected error type', async () => {
                 await expect((await ErrorTest.deploy()).throwsNoArgsError())
