@@ -14,65 +14,48 @@ describe('error', () => {
     });
 
     describe('functions that throw', () => {
-        describe('function that throws standard error', () => {
+        describe('function that throws default error', () => {
             it('should throw expected error', async () => {
                 await expect((await ErrorTest.deploy()).throwDefaultError())
                     .to.be.rejectedWith(DefaultError)
-                    .that.eventually.have.property('reason', 'error');
+                    .that.eventually.has.property('reason', 'error');
             });
         });
 
         describe('function that throws no args error', () => {
-            it('should throw expected error type', async () => {
+            it('should throw expected error', async () => {
                 await expect((await ErrorTest.deploy()).throwsNoArgsError())
                     .to.be.rejectedWith(NoArgsError);
             });
         });
 
         describe('function that throws one arg (uint256) error', () => {
-            it('should throw expected error type', async () => {
+            it('should throw expected error', async () => {
                 await expect((await ErrorTest.deploy()).throwsOneArgUint256Error())
-                    .to.be.rejectedWith(OneArgUint256Error);
-            });
-
-            it('should throw error with expected properties', async () => {
-                try {
-                    await (await ErrorTest.deploy()).throwsOneArgUint256Error();
-                    expect.fail();
-                } catch (error) {
-                    if (error instanceof OneArgUint256Error) {
-                        expect(error.uint256Arg)
-                            .to.be.equal(1n);
-                    } else {
-                        expect.fail();
-                    }
-                }
+                    .to.be.rejectedWith(OneArgUint256Error)
+                    .that.eventually.has.property('uint256Arg', 1n);
             });
         });
 
         describe('function that throws one arg (string) error', () => {
-            it('should throw expected error type', async () => {
+            it('should throw expected error', async () => {
                 await expect((await ErrorTest.deploy()).throwsOneArgStringError())
-                    .to.be.rejectedWith(OneArgStringError);
-            });
-
-            it('should throw error with expected properties', async () => {
-                try {
-                    await (await ErrorTest.deploy()).throwsOneArgStringError();
-                    expect.fail();
-                } catch (error) {
-                    if (error instanceof OneArgStringError) {
-                        expect(error.stringArg)
-                            .to.be.equal('error');
-                    } else {
-                        expect.fail();
-                    }
-                }
+                    .to.be.rejectedWith(OneArgStringError)
+                    .that.eventually.has.property('stringArg', 'error');
             });
         });
     });
 
     describe('encode', () => {
+        describe('default error', () => {
+            it('should encode correctly', () => {
+                const error = decodeErrorData(new DefaultError('error').encode());
+                expect(error)
+                    .to.be.instanceOf(DefaultError)
+                    .that.has.property('reason', 'error');
+            });
+        });
+
         describe('no args error', () => {
             it('should encode correctly', () => {
                 const error = decodeErrorData(new NoArgsError().encode());
@@ -85,11 +68,8 @@ describe('error', () => {
             it('should encode correctly', () => {
                 const error = decodeErrorData(new OneArgUint256Error(1n).encode());
                 expect(error)
-                    .to.be.instanceOf(OneArgUint256Error);
-                if (error instanceof OneArgUint256Error) {
-                    expect(error.uint256Arg)
-                        .to.be.equal(1n);
-                }
+                    .to.be.instanceOf(OneArgUint256Error)
+                    .that.has.property('uint256Arg', 1n);
             });
         });
 
@@ -97,11 +77,8 @@ describe('error', () => {
             it('should encode correctly', () => {
                 const error = decodeErrorData(new OneArgStringError('error').encode());
                 expect(error)
-                    .to.be.instanceOf(OneArgStringError);
-                if (error instanceof OneArgStringError) {
-                    expect(error.stringArg)
-                        .to.be.equal('error');
-                }
+                    .to.be.instanceOf(OneArgStringError)
+                    .that.has.property('stringArg', 'error');
             });
         });
     });
