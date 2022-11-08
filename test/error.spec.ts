@@ -1,4 +1,4 @@
-import { decodeErrorData, DefaultError } from '@frugal-wizard/abi2ts-lib';
+import { decodeErrorData, DefaultError, OutOfGas, RevertWithoutReason } from '@frugal-wizard/abi2ts-lib';
 import { use, expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { ErrorTest, NoArgsError, OneArgStringError, OneArgUint256Error } from './contracts-ts/ErrorTest';
@@ -9,39 +9,53 @@ use(chaiAsPromised);
 // TODO tests are too simple since we are only wrapping ethers, but should be more thorough for when we stop using it
 
 describe('error', () => {
-    before(() => {
-        setUpEthereum();
-    });
+    before(setUpEthereum);
 
-    describe('functions that throw', () => {
-        describe('function that throws default error', () => {
-            it('should throw expected error', async () => {
-                await expect((await ErrorTest.deploy()).throwDefaultError())
+    describe('functions that revert', () => {
+        describe('function that reverts with default error', () => {
+            it('should revert with expected error', async () => {
+                await expect((await ErrorTest.deploy()).revertWithDefaultError())
                     .to.be.rejectedWith(DefaultError)
                     .that.eventually.has.property('reason', 'error');
             });
         });
 
-        describe('function that throws no args error', () => {
-            it('should throw expected error', async () => {
-                await expect((await ErrorTest.deploy()).throwsNoArgsError())
+        describe('function that reverts with default error', () => {
+            it('should revert with expected error', async () => {
+                await expect((await ErrorTest.deploy()).revertWithoutReason())
+                    .to.be.rejectedWith(RevertWithoutReason);
+            });
+        });
+
+        describe('function that reverts with no args error', () => {
+            it('should revert with expected error', async () => {
+                await expect((await ErrorTest.deploy()).revertWithNoArgsError())
                     .to.be.rejectedWith(NoArgsError);
             });
         });
 
-        describe('function that throws one arg (uint256) error', () => {
-            it('should throw expected error', async () => {
-                await expect((await ErrorTest.deploy()).throwsOneArgUint256Error())
+        describe('function that reverts with one arg (uint256) error', () => {
+            it('should revert with expected error', async () => {
+                await expect((await ErrorTest.deploy()).revertWithOneArgUint256Error())
                     .to.be.rejectedWith(OneArgUint256Error)
                     .that.eventually.has.property('uint256Arg', 1n);
             });
         });
 
-        describe('function that throws one arg (string) error', () => {
-            it('should throw expected error', async () => {
-                await expect((await ErrorTest.deploy()).throwsOneArgStringError())
+        describe('function that reverts with one arg (string) error', () => {
+            it('should revert with expected error', async () => {
+                await expect((await ErrorTest.deploy()).revertWithOneArgStringError())
                     .to.be.rejectedWith(OneArgStringError)
                     .that.eventually.has.property('stringArg', 'error');
+            });
+        });
+    });
+
+    describe('other errors', () => {
+        describe('call without enough gas', () => {
+            it('should revert with expected error', async () => {
+                await expect((await ErrorTest.deploy()).revertWithDefaultError({ gasLimit: 1n }))
+                    .to.be.rejectedWith(OutOfGas);
             });
         });
     });
@@ -53,6 +67,14 @@ describe('error', () => {
                 expect(error)
                     .to.be.instanceOf(DefaultError)
                     .that.has.property('reason', 'error');
+            });
+        });
+
+        describe('revert without reason', () => {
+            it('should encode correctly', () => {
+                const error = decodeErrorData(new RevertWithoutReason().encode());
+                expect(error)
+                    .to.be.instanceOf(RevertWithoutReason);
             });
         });
 
