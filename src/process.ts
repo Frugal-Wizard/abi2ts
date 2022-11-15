@@ -204,9 +204,9 @@ function transformType({ type, internalType = '', components = [] }: ABITypeDefi
             api:       `${innerType.api}[]`,
             internal:  `${innerType.internal}[]`,
             user:      `${innerType.user}[]`,
-            api2int:   innerType.api2int == IDENTITY ? IDENTITY : value => `(${value}).map(v=>${ innerType.api2int('v') })`,
-            int2api:   innerType.int2api == IDENTITY ? IDENTITY : value => `(${value}).map(v=>${ innerType.int2api('v') })`,
-            usr2int:   innerType.usr2int == IDENTITY ? IDENTITY : value => `(${value}).map(v=>${ innerType.usr2int('v') })`,
+            api2int:   innerType.api2int == IDENTITY ? IDENTITY : value => `(${value}).map((v:any)=>${ innerType.api2int('v') })`,
+            int2api:   innerType.int2api == IDENTITY ? IDENTITY : value => `(${value}).map((v:any)=>${ innerType.int2api('v') })`,
+            usr2int:   innerType.usr2int == IDENTITY ? IDENTITY : value => `(${value}).map((v:any)=>${ innerType.usr2int('v') })`,
             int2topic: FAIL,
         };
     }
@@ -263,8 +263,8 @@ function transformType({ type, internalType = '', components = [] }: ABITypeDefi
                     api:       `[${ innerTypes.map(({ api }) => api).join(', ') }]`,
                     internal:  structName,
                     user:      structName,
-                    api2int:   value => `(v=>new ${structName}(${ innerTypes.map(({ api2int }, i) => api2int(`v[${i}]`)) }))(${value})`,
-                    int2api:   value => `(v=>[${ innerTypes.map(({ int2api }, i) => int2api(`v[${i}]`)) }])(Object.values(${value}))`,
+                    api2int:   value => `((v:any)=>new ${structName}(${ innerTypes.map(({ api2int }, i) => api2int(`v[${i}]`)) }))(${value})`,
+                    int2api:   value => `((v:any)=>[${ innerTypes.map(({ int2api }, i) => int2api(`v[${i}]`)) }])(Object.values(${value}))`,
                     usr2int:   IDENTITY,
                     int2topic: FAIL,
                 };
@@ -274,11 +274,11 @@ function transformType({ type, internalType = '', components = [] }: ABITypeDefi
                     internal:  `[${ innerTypes.map(({ internal }) => internal).join(', ') }]`,
                     user:      `[${ innerTypes.map(({ user }) => user).join(', ') }]`,
                     api2int:   innerTypes.every(({ api2int }) => api2int == IDENTITY) ? IDENTITY :
-                                   value => `(v=>[${ innerTypes.map(({ api2int }, i) => api2int(`v[${i}]`)) }])(${value})`,
+                                   value => `((v:any)=>[${ innerTypes.map(({ api2int }, i) => api2int(`v[${i}]`)) }])(${value})`,
                     int2api:   innerTypes.every(({ int2api }) => int2api == IDENTITY) ? IDENTITY :
-                                   value => `(v=>[${ innerTypes.map(({ int2api }, i) => int2api(`v[${i}]`)) }])(${value})`,
+                                   value => `((v:any)=>[${ innerTypes.map(({ int2api }, i) => int2api(`v[${i}]`)) }])(${value})`,
                     usr2int:   innerTypes.every(({ usr2int }) => usr2int == IDENTITY) ? IDENTITY :
-                                   value => `(v=>[${ innerTypes.map(({ usr2int }, i) => usr2int(`v[${i}]`)) }])(${value})`,
+                                   value => `((v:any)=>[${ innerTypes.map(({ usr2int }, i) => usr2int(`v[${i}]`)) }])(${value})`,
                     int2topic: FAIL,
                 };
             }
