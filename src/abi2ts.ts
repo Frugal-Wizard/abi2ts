@@ -1,10 +1,10 @@
 import { parseCompiledSolidity } from './parse';
 import { ArgData, ContractData, findStructs, LinkArgData, StructsData, transformConstructor, transformError, transformEvent, transformFunction } from './process';
 
-function declareArgs(args: (ArgData | LinkArgData)[], includeOverrides = false) {
+function declareArgs(args: (ArgData | LinkArgData)[], includeOptions = false) {
     return args
         .map(({ name, type, defaultValue }) => `${name}: ${type.user}${ defaultValue ? ` = ${defaultValue}` : '' }`)
-        .concat(includeOverrides ? 'overrides: abi2tsLib.CallOverrides = {}' : '')
+        .concat(includeOptions ? 'options: abi2tsLib.CallOptions = {}' : '')
         .join(', ');
 }
 
@@ -57,42 +57,42 @@ export class ${className} extends abi2tsLib.Contract {
 
 ${ bytecode ? `
     static async deploy(${declareArgs(deployArgs, true)}): Promise<${className}> {
-        return await this._deploy(${linkArgsObject(linkArgs)}, ${argsArray(ctorArgs)}, overrides);
+        return await this._deploy(${linkArgsObject(linkArgs)}, ${argsArray(ctorArgs)}, options);
     }
 
     static readonly sendTransaction = {
         deploy: async (${declareArgs(deployArgs, true)}): Promise<string> => {
-            return await this._deploySendTransaction(${linkArgsObject(linkArgs)}, ${argsArray(ctorArgs)}, overrides);
+            return await this._deploySendTransaction(${linkArgsObject(linkArgs)}, ${argsArray(ctorArgs)}, options);
         }
     };
 
     static readonly callStatic = {
         deploy: async (${declareArgs(deployArgs, true)}): Promise<string> => {
-            return await this._deployStatic(${linkArgsObject(linkArgs)}, ${argsArray(ctorArgs)}, overrides);
+            return await this._deployStatic(${linkArgsObject(linkArgs)}, ${argsArray(ctorArgs)}, options);
         }
     };
 
     static readonly populateTransaction = {
         deploy: async (${declareArgs(deployArgs, true)}): Promise<abi2tsLib.UnsignedTransaction> => {
-            return await this._deployPopulateTransaction(${linkArgsObject(linkArgs)}, ${argsArray(ctorArgs)}, overrides);
+            return await this._deployPopulateTransaction(${linkArgsObject(linkArgs)}, ${argsArray(ctorArgs)}, options);
         }
     };
 `: '' }
 
 ${ functions.map(({ read, name, args, returnType }) => read ? `
     async ${name}(${declareArgs(args, true)}): Promise<${returnType.internal}> {
-        return ${ returnType.api2int(`await this._callStatic('${name}', ${argsArray(args)}, overrides)` )};
+        return ${ returnType.api2int(`await this._callStatic('${name}', ${argsArray(args)}, options)` )};
     }
 ` : `
     async ${name}(${declareArgs(args, true)}): Promise<abi2tsLib.Transaction> {
-        return await this._call('${name}', ${argsArray(args)}, overrides);
+        return await this._call('${name}', ${argsArray(args)}, options);
     }
 `).join('') }
 
     readonly sendTransaction = {
 ${ functions.filter(({ write }) => write).map(({ name, args }) => `
         ${name}: async (${declareArgs(args, true)}): Promise<string> => {
-            return await this._sendTransaction('${name}', ${argsArray(args)}, overrides);
+            return await this._sendTransaction('${name}', ${argsArray(args)}, options);
         },
 `).join('') }
     };
@@ -100,7 +100,7 @@ ${ functions.filter(({ write }) => write).map(({ name, args }) => `
     readonly callStatic = {
 ${ functions.map(({ name, args, returnType }) => `
         ${name}: async (${declareArgs(args, true)}): Promise<${returnType.internal}> => {
-            return ${ returnType.api2int(`await this._callStatic('${name}', ${argsArray(args)}, overrides)` )};
+            return ${ returnType.api2int(`await this._callStatic('${name}', ${argsArray(args)}, options)` )};
         },
 `).join('') }
     };
@@ -108,7 +108,7 @@ ${ functions.map(({ name, args, returnType }) => `
     readonly populateTransaction = {
 ${ functions.map(({ name, args }) => `
         ${name}: async (${declareArgs(args, true)}): Promise<abi2tsLib.UnsignedTransaction> => {
-            return await this._populateTransaction('${name}', ${argsArray(args)}, overrides);
+            return await this._populateTransaction('${name}', ${argsArray(args)}, options);
         },
 `).join('') }
     };
@@ -116,7 +116,7 @@ ${ functions.map(({ name, args }) => `
     readonly estimateGas = {
 ${ functions.map(({ name, args }) => `
         ${name}: async (${declareArgs(args, true)}): Promise<bigint> => {
-            return await this._estimateGas('${name}', ${argsArray(args)}, overrides);
+            return await this._estimateGas('${name}', ${argsArray(args)}, options);
         },
 `).join('') }
     };
@@ -141,8 +141,8 @@ export interface ${name}Filter {
 }
 
 export class ${name} extends abi2tsLib.ContractEvent {
-    static async * get(filter: ${name}Filter = {}): AsyncIterable<${name}> {
-        for (const log of await abi2tsLib.getLogs({ address: filter.address, fromBlock: filter.fromBlock, toBlock: filter.toBlock, topics: [ ${name}.TOPIC${ args.filter(({ indexed }) => indexed).map(({ name, type }) => `, filter.${name} === undefined ? null : ${type.int2topic(type.usr2int(`filter.${name}`))}`).join('') } ] })) {
+    static async * get(filter: ${name}Filter = {}, abortSignal?: AbortSignal): AsyncIterable<${name}> {
+        for (const log of await abi2tsLib.getLogs({ address: filter.address, fromBlock: filter.fromBlock, toBlock: filter.toBlock, topics: [ ${name}.TOPIC${ args.filter(({ indexed }) => indexed).map(({ name, type }) => `, filter.${name} === undefined ? null : ${type.int2topic(type.usr2int(`filter.${name}`))}`).join('') } ] }, abortSignal)) {
             yield abi2tsLib.ContractEvent.decode(log) as ${name};
         }
     }
