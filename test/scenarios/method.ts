@@ -1,4 +1,4 @@
-import { UnsignedTransaction } from '@frugal-wizard/abi2ts-lib';
+import { UnsignedTransaction, ZERO_ADDRESS } from '@frugal-wizard/abi2ts-lib';
 import { MethodTest } from '../contracts-ts/MethodTest';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -152,5 +152,25 @@ export const methodScenarios: Scenario[] = [
         readonly: true,
         expectedReturnType: 'bigint',
         ...fillInScenario('oneArgUint256ReturnUint256ReadOnly', 1n),
+    },
+    {
+        description: 'readonly method with one arg (address) and no return',
+        readonly: false,
+        ...fillInScenario('oneArgAddressNoReturn', ZERO_ADDRESS),
+    },
+    {
+        description: 'readonly method with one arg (uint256 array) and no return',
+        readonly: false,
+        ...fillInScenario('oneArgUint256ArrayNoReturn', [ 1n ]),
+    },
+    {
+        description: 'readonly method with one arg (string array) and no return',
+        readonly: false,
+        ...fillInScenario('oneArgStringArrayNoReturn', [ 'string' ]),
+    },
+    {
+        description: 'readonly method with one arg (address array) and no return',
+        readonly: false,
+        ...fillInScenario('oneArgAddressArrayNoReturn', [ ZERO_ADDRESS ]),
     },
 ];

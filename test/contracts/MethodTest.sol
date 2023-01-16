@@ -47,4 +47,16 @@ contract MethodTest {
 
     function oneArgStringReturnStringReadOnly(string calldata) external view returns (string memory) {
     }
+
+    function oneArgAddressNoReturn(address) external {
+    }
+
+    function oneArgUint256ArrayNoReturn(uint256[] calldata) external {
+    }
+
+    function oneArgStringArrayNoReturn(string[] calldata) external {
+    }
+
+    function oneArgAddressArrayNoReturn(address[] calldata) external {
+    }
 }

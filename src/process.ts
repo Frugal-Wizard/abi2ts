@@ -239,7 +239,7 @@ function transformType({ type, internalType = '', components = [] }: ABITypeDefi
             return {
                 api:       'string',
                 internal:  'abi2tsLib.Address',
-                user:      'abi2tsLib.Address | abi2tsLib.HasAddress',
+                user:      'abi2tsLib.Addressable',
                 api2int:   IDENTITY,
                 int2api:   IDENTITY,
                 usr2int:   value => `(typeof ${value} == 'object' ? ${value}.address : ${value})`,
