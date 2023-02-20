@@ -37,7 +37,7 @@ export function abi2ts(jsonContents: Buffer): Buffer {
         contracts.push({ className, abi, bytecode, deployArgs, linkArgs, ctorArgs, errors, events, functions });
     }
     return Buffer.from(`
-import * as abi2tsLib from '@frugal-wizard/abi2ts-lib';
+import * as abi2tsLib from '@frugalwizard/abi2ts-lib';
 
 ${ Object.entries(structs).map(([ structName, fields ]) => `
 export class ${structName} {${ fields.map(({ name, type }) => `

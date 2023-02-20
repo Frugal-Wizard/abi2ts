@@ -1,6 +1,6 @@
 {
-  "name": "@frugal-wizard/abi2ts",
-  "version": "0.8.0",
+  "name": "@frugalwizard/abi2ts",
+  "version": "0.8.1",
   "description": "This is a code generator that takes the JSON produced by the solidity compiler and creates typescript code for interacting with the corresponding smart contracts",
   "license": "MIT",
   "author": "Frugal-Wizard",
@@ -29,8 +29,8 @@
     "yargs": "^17.6.2"
   },
   "devDependencies": {
-    "@frugal-wizard/abi2ts-lib": "^0.8.0",
-    "@frugal-wizard/solidity-compiler-wrapper": "^1.2.0",
+    "@frugalwizard/abi2ts-lib": "^0.8.0",
+    "@frugalwizard/solidity-compiler-wrapper": "^1.2.0",
     "@types/chai": "^4.3.4",
     "@types/chai-as-promised": "^7.1.5",
     "@types/glob": "^8.0.1",

@@ -1,4 +1,4 @@
-import { getBlockNumber } from '@frugal-wizard/abi2ts-lib';
+import { getBlockNumber } from '@frugalwizard/abi2ts-lib';
 import { use, expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { EventTest, NoArgsEvent, OneArgAddressEvent, OneArgIndexedAddressEvent, OneArgIndexedUint256Event, OneArgIndexedUint8Event, OneArgStringEvent, OneArgUint256Event, OneArgUint8Event } from './contracts-ts/EventTest';

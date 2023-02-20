@@ -1,4 +1,4 @@
-import { UnsignedTransaction, ZERO_ADDRESS } from '@frugal-wizard/abi2ts-lib';
+import { UnsignedTransaction, ZERO_ADDRESS } from '@frugalwizard/abi2ts-lib';
 import { MethodTest } from '../contracts-ts/MethodTest';
 
 // eslint-disable-next-line @typescript-eslint/ban-types

@@ -1,4 +1,4 @@
-import { DefaultError, UnsignedTransaction } from '@frugal-wizard/abi2ts-lib';
+import { DefaultError, UnsignedTransaction } from '@frugalwizard/abi2ts-lib';
 import { ConstructorNoArgs, ConstructorOneArgString, ConstructorOneArgUint256, ConstructorThrowsError } from '../contracts-ts/ConstructorTest';
 
 interface Scenario {

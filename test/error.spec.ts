@@ -1,4 +1,4 @@
-import { decodeErrorData, DefaultError, OutOfGas, RevertWithoutReason } from '@frugal-wizard/abi2ts-lib';
+import { decodeErrorData, DefaultError, OutOfGas, RevertWithoutReason } from '@frugalwizard/abi2ts-lib';
 import { use, expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { ErrorTest, NoArgsError, OneArgStringError, OneArgUint256Error } from './contracts-ts/ErrorTest';

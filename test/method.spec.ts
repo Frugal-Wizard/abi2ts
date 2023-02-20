@@ -1,4 +1,4 @@
-import { createSigner, parseValue, Transaction } from '@frugal-wizard/abi2ts-lib';
+import { createSigner, parseValue, Transaction } from '@frugalwizard/abi2ts-lib';
 import { use, expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import addContext from 'mochawesome/addContext';
