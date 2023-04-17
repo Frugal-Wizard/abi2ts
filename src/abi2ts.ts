@@ -1,5 +1,5 @@
 import { parseCompiledSolidity } from './parse';
-import { ArgData, ContractData, findStructs, LinkArgData, StructsData, transformConstructor, transformError, transformEvent, transformFunction } from './process';
+import { ArgData, ContractData, extractFunctions, findStructs, LinkArgData, StructsData, transformConstructor, transformError, transformEvent } from './process';
 
 function declareArgs(args: (ArgData | LinkArgData)[], includeOptions = false) {
     return args
@@ -33,7 +33,7 @@ export function abi2ts(jsonContents: Buffer): Buffer {
         const { deployArgs, linkArgs, ctorArgs } = transformConstructor({ ...constructorDef, linkReferences });
         const errors = abi.filter(({ type }) => type == 'error').map(transformError);
         const events = abi.filter(({ type }) => type == 'event').map(transformEvent);
-        const functions = abi.filter(({ type }) => type == 'function').map(transformFunction);
+        const functions = [...extractFunctions(abi)];
         contracts.push({ className, abi, bytecode, deployArgs, linkArgs, ctorArgs, errors, events, functions });
     }
     return Buffer.from(`
@@ -80,18 +80,18 @@ ${ bytecode ? `
 `: '' }
 
 ${ functions.map(({ read, name, args, returnType }) => read ? `
-    async ${name}(${declareArgs(args, true)}): Promise<${returnType.internal}> {
+    async ['${name}'](${declareArgs(args, true)}): Promise<${returnType.internal}> {
         return ${ returnType.api2int(`await this._callStatic('${name}', ${argsArray(args)}, options)` )};
     }
 ` : `
-    async ${name}(${declareArgs(args, true)}): Promise<abi2tsLib.Transaction> {
+    async ['${name}'](${declareArgs(args, true)}): Promise<abi2tsLib.Transaction> {
         return await this._call('${name}', ${argsArray(args)}, options);
     }
 `).join('') }
 
     readonly sendTransaction = {
 ${ functions.filter(({ write }) => write).map(({ name, args }) => `
-        ${name}: async (${declareArgs(args, true)}): Promise<string> => {
+        ['${name}']: async (${declareArgs(args, true)}): Promise<string> => {
             return await this._sendTransaction('${name}', ${argsArray(args)}, options);
         },
 `).join('') }
@@ -99,7 +99,7 @@ ${ functions.filter(({ write }) => write).map(({ name, args }) => `
 
     readonly callStatic = {
 ${ functions.map(({ name, args, returnType }) => `
-        ${name}: async (${declareArgs(args, true)}): Promise<${returnType.internal}> => {
+        ['${name}']: async (${declareArgs(args, true)}): Promise<${returnType.internal}> => {
             return ${ returnType.api2int(`await this._callStatic('${name}', ${argsArray(args)}, options)` )};
         },
 `).join('') }
@@ -107,7 +107,7 @@ ${ functions.map(({ name, args, returnType }) => `
 
     readonly populateTransaction = {
 ${ functions.map(({ name, args }) => `
-        ${name}: async (${declareArgs(args, true)}): Promise<abi2tsLib.UnsignedTransaction> => {
+        ['${name}']: async (${declareArgs(args, true)}): Promise<abi2tsLib.UnsignedTransaction> => {
             return await this._populateTransaction('${name}', ${argsArray(args)}, options);
         },
 `).join('') }
@@ -115,7 +115,7 @@ ${ functions.map(({ name, args }) => `
 
     readonly estimateGas = {
 ${ functions.map(({ name, args }) => `
-        ${name}: async (${declareArgs(args, true)}): Promise<bigint> => {
+        ['${name}']: async (${declareArgs(args, true)}): Promise<bigint> => {
             return await this._estimateGas('${name}', ${argsArray(args)}, options);
         },
 `).join('') }
@@ -123,7 +123,7 @@ ${ functions.map(({ name, args }) => `
 
     static readonly encode = {
 ${ functions.map(({ name, args }) => `
-        ${name}: (${declareArgs(args)}): string => {
+        ['${name}']: (${declareArgs(args)}): string => {
             return this._encode('${name}', ${argsArray(args)});
         },
 `).join('') }

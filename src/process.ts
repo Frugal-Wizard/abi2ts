@@ -85,7 +85,36 @@ function findStructsInTypes({ internalType = '', components = [] }: ABITypeDefin
     }
 }
 
-export function transformFunction({ name = '', stateMutability, inputs = [], outputs = [] }: ABIDefinition): FunctionData {
+export function* extractFunctions(abi: ABI) {
+    const map = new Map<string, ABIDefinition[]>();
+
+    for (const def of abi) {
+        if (def.type != 'function') continue;
+        if (!def.name) continue;
+        const defs = map.get(def.name);
+        if (!defs) {
+            map.set(def.name, [def]);
+        } else {
+            defs.push(def);
+        }
+    }
+
+    for (const [ name, defs ] of map.entries()) {
+        if (defs.length == 1) {
+            yield transformFunction(name, defs[0]);
+        } else {
+            for (const def of defs) {
+                yield transformFunction(`${name}(${typeSig(def.inputs)})`, def);
+            }
+        }
+    }
+}
+
+function typeSig(types: ABITypeDefinition[] = []) {
+    return types.map(({ type }) => type).join(',');
+}
+
+function transformFunction(name: string, { stateMutability, inputs = [], outputs = [] }: ABIDefinition): FunctionData {
     let read = false;
     let write = false;
     switch (stateMutability) {
