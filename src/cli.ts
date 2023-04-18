@@ -2,7 +2,7 @@
 
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
-import glob from 'glob';
+import { globSync } from 'glob';
 import { mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { basename, dirname, join } from 'path';
 import { abi2ts } from './abi2ts';
@@ -27,7 +27,7 @@ yargs(hideBin(process.argv))
             inputDir: string;
             outputDir?: string;
         };
-        for (const inputFile of glob.sync('**/*.json', { cwd: inputDir, ignore: '**/*.input.json' })) {
+        for (const inputFile of globSync('**/*.json', { cwd: inputDir, ignore: '**/*.input.json' })) {
             console.log(`Creating typescript for ${join(inputDir, inputFile)}...`);
             const outputFile = join(outputDir, dirname(inputFile), basename(inputFile, '.json'));
             mkdirSync(dirname(outputFile), { recursive: true });
